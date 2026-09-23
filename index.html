@@ -515,8 +515,9 @@
                 left.classList.add('incorrect');
                 right.classList.add('incorrect');
                 setTimeout(() => {
-                    left.classList.remove('incorrect', 'selected');
-                    right.classList.remove('incorrect', 'selected');
+                    document.querySelectorAll('.match-item.selected, .match-item.incorrect').forEach(el => {
+                        el.classList.remove('selected', 'incorrect');
+                    });
                     selectedLeft = null;
                     selectedRight = null;
                     busy = false;
