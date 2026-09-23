@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match the Product</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            color: #000000;
+        }
+
+        .container {
+            max-width: 520px;
+            width: 100%;
+            padding: 24px 0;
+        }
+
+        .header {
+            margin-bottom: 32px;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 16px;
+            background: #e5e5e5;
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #58cc02;
+            border-radius: 100px;
+            transition: width 0.3s ease;
+        }
+
+        .timer {
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            color: #4b4b4b;
+            white-space: nowrap;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #3c3c3c;
+        }
+
+        .round-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #afafaf;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .match-grid {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .match-grid.active {
+            display: grid;
+        }
+
+        .match-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .match-item {
+            padding: 16px 10px;
+            border: 2px solid #e5e5e5;
+            background: #FFFFFF;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            transition: all 0.15s ease;
+            text-align: center;
+            color: #3c3c3c;
+            font-weight: 600;
+            border-radius: 14px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.3;
+        }
+
+        .match-item:hover:not(:disabled):not(.matched) {
+            border-color: #84d8ff;
+            background: #ddf4ff;
+        }
+
+        .match-item.selected {
+            border-color: #1cb0f6;
+            background: #ddf4ff;
+        }
+
+        .match-item.matched {
+            background: #f0f0f0;
+            border-color: #d0d0d0;
+            color: #b0b0b0;
+            cursor: default;
+            transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+        }
+
+        .match-item.correct-flash {
+            background: #d7ffb8;
+            border-color: #58cc02;
+            color: #58a700;
+        }
+
+        .match-item.incorrect {
+            background: #ffdfe0;
+            border-color: #ff4b4b;
+            color: #ea2b2b;
+        }
+
+        .welcome {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .welcome-content {
+            text-align: center;
+            max-width: 500px;
+            padding: 0 16px;
+        }
+
+        .welcome-illustration {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            margin-bottom: 24px;
+        }
+
+        .welcome-content h1 {
+            font-size: 30px;
+            font-weight: 800;
+            color: #3c3c3c;
+            margin-bottom: 40px;
+        }
+
+        .welcome-rules {
+            text-align: left;
+            margin-bottom: 48px;
+            line-height: 1.8;
+        }
+
+        .welcome-rules p {
+            font-size: 16px;
+            margin-bottom: 24px;
+            color: #4b4b4b;
+            font-weight: 500;
+        }
+
+        .start-btn {
+            background: #58cc02;
+            color: #FFFFFF;
+            border: none;
+            border-bottom: 4px solid #58a700;
+            padding: 16px 40px;
+            font-size: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            font-weight: 800;
+            border-radius: 16px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        .start-btn:hover {
+            background: #61e002;
+        }
+
+        .start-btn:active {
+            border-bottom-width: 2px;
+            transform: translateY(2px);
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .results h2 {
+            font-size: 30px;
+            font-weight: 800;
+            color: #3c3c3c;
+            margin-bottom: 32px;
+        }
+
+        .score-box {
+            margin: 32px 0;
+            padding: 32px;
+            border: 2px solid #e5e5e5;
+            border-radius: 16px;
+        }
+
+        .score-item {
+            margin: 0;
+        }
+
+        .score-label {
+            font-size: 13px;
+            color: #afafaf;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .score-value {
+            font-size: 44px;
+            font-weight: 800;
+            color: #3c3c3c;
+            font-family: 'Courier New', monospace;
+        }
+
+        .restart-btn {
+            background: #58cc02;
+            color: #FFFFFF;
+            border: none;
+            border-bottom: 4px solid #58a700;
+            padding: 16px 40px;
+            font-size: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            font-weight: 800;
+            margin-top: 16px;
+            border-radius: 16px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        .restart-btn:hover {
+            background: #61e002;
+        }
+
+        .restart-btn:active {
+            border-bottom-width: 2px;
+            transform: translateY(2px);
+        }
+        .confetti-piece {
+            position: fixed;
+            top: -20px;
+            border-radius: 2px;
+            opacity: 0.9;
+            animation: confetti-fall linear forwards;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .results h2 {
+            animation: pop-in 0.4s ease;
+        }
+
+        @keyframes pop-in {
+            0% { transform: scale(0.7); opacity: 0; }
+            60% { transform: scale(1.08); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header" id="gameHeader" style="display: none;">
+            <div class="header-top">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="timer" id="timer">00:00</div>
+            </div>
+            <h1>Match the product</h1>
+            <div class="round-label">Round <span id="roundNum">1</span> of 3</div>
+        </div>
+
+        <div id="welcomeContainer" class="welcome">
+            <div class="welcome-content">
+                <svg class="welcome-illustration" viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="20" y="50" width="80" height="60" rx="14" fill="#DDF4FF" stroke="#1CB0F6" stroke-width="3"/>
+                    <rect x="34" y="66" width="52" height="8" rx="4" fill="#1CB0F6"/>
+                    <rect x="34" y="82" width="36" height="8" rx="4" fill="#84D8FF"/>
+
+                    <rect x="220" y="50" width="80" height="60" rx="14" fill="#D7FFB8" stroke="#58CC02" stroke-width="3"/>
+                    <rect x="234" y="66" width="52" height="8" rx="4" fill="#58CC02"/>
+                    <rect x="234" y="82" width="36" height="8" rx="4" fill="#A6E572"/>
+
+                    <path d="M104 80 C 140 40, 180 120, 216 80" stroke="#FF9600" stroke-width="3" fill="none" stroke-dasharray="6 6" stroke-linecap="round"/>
+
+                    <circle cx="160" cy="80" r="22" fill="#FF9600"/>
+                    <path d="M150 80 L157 87 L172 70" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                <h1>Match the Product</h1>
+                <button class="start-btn" onclick="startGame()">Start</button>
+            </div>
+        </div>
+
+        <div id="gameContainer" style="display: none;">
+            <div class="match-grid" id="matchGrid">
+                <div class="match-column" id="leftColumn"></div>
+                <div class="match-column" id="rightColumn"></div>
+            </div>
+        </div>
+
+        <div id="resultsContainer" class="results">
+            <h2>Nice! 🎉</h2>
+            <div class="score-box">
+                <div class="score-item">
+                    <div class="score-label">Time</div>
+                    <div class="score-value" id="finalTime">00:00</div>
+                </div>
+            </div>
+            <button class="restart-btn" onclick="location.reload()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Placeholder data - replace project/product pairs as needed
+        const gameData = [
+            { project: 'Tyler S', product: 'Acton III' },
+            { project: 'Tyler M', product: 'Stanmore III' },
+            { project: 'Tyler L', product: 'Woburn III' },
+            { project: 'Nicks S', product: 'Acton IV' },
+            { project: 'Nicks M', product: 'Stanmore IV' },
+            { project: 'Ozzy', product: 'Monitor II ANC' },
+            { project: 'Plant', product: 'Major V' },
+            { project: 'Watts', product: 'Monitor III ANC' },
+            { project: 'Waters', product: 'Milton ANC' },
+            { project: 'Sammy', product: 'Motif ANC' },
+            { project: 'Saxon', product: 'Mode II' },
+            { project: 'Jett', product: 'Minor III' },
+            { project: 'Gahan', product: 'Motif II ANC' },
+            { project: 'Moon', product: 'Minor IV' },
+            { project: 'Emberton II', product: 'Emberton II' }
+        ];
+
+        const PAIRS_PER_ROUND = 5;
+        const TOTAL_ROUNDS = 3;
+
+        let rounds = [];
+        let currentRound = 0;
+        let matchesInRound = 0;
+        let totalMatched = 0;
+        let startTime = Date.now();
+        let gameEnded = false;
+        let selectedLeft = null;
+        let selectedRight = null;
+        let busy = false;
+
+        function shuffle(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function startGame() {
+            document.getElementById('welcomeContainer').style.display = 'none';
+            document.getElementById('gameHeader').style.display = 'block';
+            document.getElementById('gameContainer').style.display = 'block';
+            initGame();
+        }
+
+        function initGame() {
+            const shuffledData = shuffle(gameData).slice(0, PAIRS_PER_ROUND * TOTAL_ROUNDS);
+            rounds = [];
+            for (let i = 0; i < TOTAL_ROUNDS; i++) {
+                rounds.push(shuffledData.slice(i * PAIRS_PER_ROUND, (i + 1) * PAIRS_PER_ROUND));
+            }
+            currentRound = 0;
+            totalMatched = 0;
+            gameEnded = false;
+            startTime = Date.now();
+
+            renderRound();
+            startTimer();
+        }
+
+        function renderRound() {
+            matchesInRound = 0;
+            selectedLeft = null;
+            selectedRight = null;
+
+            const roundPairs = rounds[currentRound];
+            document.getElementById('roundNum').textContent = currentRound + 1;
+
+            const leftCol = document.getElementById('leftColumn');
+            const rightCol = document.getElementById('rightColumn');
+            leftCol.innerHTML = '';
+            rightCol.innerHTML = '';
+
+            roundPairs.forEach(pair => {
+                const leftBtn = document.createElement('button');
+                leftBtn.className = 'match-item';
+                leftBtn.textContent = pair.project;
+                leftBtn.dataset.key = pair.project;
+                leftBtn.onclick = () => selectItem(leftBtn, 'left', pair.project);
+                leftCol.appendChild(leftBtn);
+            });
+
+            const shuffledRight = shuffle(roundPairs);
+            shuffledRight.forEach(pair => {
+                const rightBtn = document.createElement('button');
+                rightBtn.className = 'match-item';
+                rightBtn.textContent = pair.product;
+                rightBtn.dataset.key = pair.project;
+                rightBtn.onclick = () => selectItem(rightBtn, 'right', pair.project);
+                rightCol.appendChild(rightBtn);
+            });
+
+            updateProgress();
+        }
+
+        function selectItem(btn, side, key) {
+            if (busy || btn.classList.contains('matched')) return;
+
+            if (side === 'left') {
+                if (selectedLeft) selectedLeft.classList.remove('selected');
+                selectedLeft = btn;
+                btn.classList.add('selected');
+            } else {
+                if (selectedRight) selectedRight.classList.remove('selected');
+                selectedRight = btn;
+                btn.classList.add('selected');
+            }
+
+            if (selectedLeft && selectedRight) {
+                evaluateMatch();
+            }
+        }
+
+        function evaluateMatch() {
+            const left = selectedLeft;
+            const right = selectedRight;
+            const isMatch = left.dataset.key === right.dataset.key;
+
+            if (isMatch) {
+                left.classList.remove('selected');
+                right.classList.remove('selected');
+                left.classList.add('matched', 'correct-flash');
+                right.classList.add('matched', 'correct-flash');
+                left.disabled = true;
+                right.disabled = true;
+                selectedLeft = null;
+                selectedRight = null;
+                matchesInRound++;
+                totalMatched++;
+                updateProgress();
+
+                setTimeout(() => {
+                    left.classList.remove('correct-flash');
+                    right.classList.remove('correct-flash');
+                }, 400);
+
+                if (matchesInRound === PAIRS_PER_ROUND) {
+                    busy = true;
+                    setTimeout(() => {
+                        currentRound++;
+                        if (currentRound >= TOTAL_ROUNDS) {
+                            endGame();
+                        } else {
+                            renderRound();
+                        }
+                        busy = false;
+                    }, 700);
+                }
+            } else {
+                busy = true;
+                left.classList.add('incorrect');
+                right.classList.add('incorrect');
+                setTimeout(() => {
+                    left.classList.remove('incorrect', 'selected');
+                    right.classList.remove('incorrect', 'selected');
+                    selectedLeft = null;
+                    selectedRight = null;
+                    busy = false;
+                }, 500);
+            }
+        }
+
+        function updateProgress() {
+            const progress = (totalMatched / (PAIRS_PER_ROUND * TOTAL_ROUNDS)) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function startTimer() {
+            setInterval(() => {
+                if (gameEnded) return;
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+                document.getElementById('timer').textContent =
+                    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 100);
+        }
+
+        function spawnConfetti() {
+            const colors = ['#58cc02', '#1cb0f6', '#ff9600', '#ff4b4b', '#ffc800'];
+            const count = 60;
+            for (let i = 0; i < count; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                const size = 6 + Math.random() * 6;
+                piece.style.width = size + 'px';
+                piece.style.height = size + 'px';
+                piece.style.left = Math.random() * 100 + 'vw';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animationDuration = (2.5 + Math.random() * 1.5) + 's';
+                piece.style.animationDelay = (Math.random() * 0.3) + 's';
+                if (Math.random() > 0.5) piece.style.borderRadius = '50%';
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 4500);
+            }
+        }
+
+        function endGame() {
+            gameEnded = true;
+
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+            document.getElementById('gameHeader').style.display = 'none';
+            document.getElementById('gameContainer').style.display = 'none';
+            document.getElementById('resultsContainer').classList.add('show');
+            document.getElementById('finalTime').textContent = timeStr;
+            spawnConfetti();
+        }
+
+        document.getElementById('welcomeContainer').style.display = 'flex';
+        document.getElementById('matchGrid').classList.add('active');
+    </script>
+</body>
+</html>
