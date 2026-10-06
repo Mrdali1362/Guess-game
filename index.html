@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Match the Product</title>
@@ -313,6 +312,172 @@
             60% { transform: scale(1.08); opacity: 1; }
             100% { transform: scale(1); }
         }
+
+        /* Admin */
+        .admin {
+            display: none;
+        }
+
+        .admin.show {
+            display: block;
+        }
+
+        .admin-back {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1cb0f6;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .admin h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #3c3c3c;
+            margin-bottom: 8px;
+        }
+
+        .admin-sub {
+            font-size: 14px;
+            color: #777777;
+            line-height: 1.5;
+            font-weight: 500;
+            margin-bottom: 28px;
+        }
+
+        .admin-field {
+            margin-bottom: 24px;
+        }
+
+        .admin-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+            font-size: 13px;
+            font-weight: 800;
+            color: #4b4b4b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .admin-label span {
+            font-size: 12px;
+            font-weight: 700;
+            color: #afafaf;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .admin textarea {
+            display: block;
+            width: 100%;
+            min-height: 120px;
+            max-height: 360px;
+            padding: 14px;
+            border: 2px solid #e5e5e5;
+            border-radius: 14px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #3c3c3c;
+            background: #FFFFFF;
+            resize: vertical;
+            outline: none;
+        }
+
+        .admin textarea:focus {
+            border-color: #1cb0f6;
+            background: #f7fcff;
+        }
+
+        .admin-status {
+            font-size: 13px;
+            font-weight: 600;
+            color: #777777;
+            line-height: 1.5;
+            margin-top: 8px;
+            white-space: pre-line;
+        }
+
+        .admin-status.error {
+            color: #ea2b2b;
+        }
+
+        .admin-status.ok {
+            color: #58a700;
+        }
+
+        .admin-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .admin-btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 15px;
+            font-family: inherit;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-radius: 16px;
+            cursor: pointer;
+            border: none;
+            border-bottom: 4px solid #58a700;
+            background: #58cc02;
+            color: #FFFFFF;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .admin-btn.secondary {
+            background: #FFFFFF;
+            color: #1cb0f6;
+            border: 2px solid #e5e5e5;
+            border-bottom-width: 4px;
+        }
+
+        .admin-btn:active:not(:disabled) {
+            border-bottom-width: 2px;
+            transform: translateY(2px);
+        }
+
+        .admin-btn:disabled {
+            background: #e5e5e5;
+            color: #afafaf;
+            border-color: #d0d0d0;
+            cursor: not-allowed;
+        }
+
+        @media (hover: hover) {
+            .admin-btn:hover:not(:disabled) {
+                filter: brightness(1.05);
+            }
+        }
+
+        .admin-note {
+            font-size: 12px;
+            color: #afafaf;
+            line-height: 1.5;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .admin-entry {
+            display: inline-block;
+            margin-top: 28px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #afafaf;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
     </style>
 </head>
 <body>
@@ -325,27 +490,28 @@
                 <div class="timer" id="timer">00:00</div>
             </div>
             <h1>Match the product</h1>
-            <div class="round-label">Round <span id="roundNum">1</span> of 3</div>
+            <div class="round-label">Level <span id="levelNum">1</span> · Round <span id="roundNum">1</span> of <span id="roundsInLevel">3</span></div>
         </div>
 
-        <div id="welcomeContainer" class="welcome">
+        <div id="welcomeContainer" class="welcome" style="display: none;">
             <div class="welcome-content">
                 <svg class="welcome-illustration" viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="20" y="50" width="80" height="60" rx="14" fill="#DDF4FF" stroke="#1CB0F6" stroke-width="3"/>
-                    <rect x="34" y="66" width="52" height="8" rx="4" fill="#1CB0F6"/>
-                    <rect x="34" y="82" width="36" height="8" rx="4" fill="#84D8FF"/>
+                    <rect x="20" y="50" width="80" height="60" rx="14" fill="#DDF4FF" stroke="#1CB0F6" stroke-width="3"></rect>
+                    <rect x="34" y="66" width="52" height="8" rx="4" fill="#1CB0F6"></rect>
+                    <rect x="34" y="82" width="36" height="8" rx="4" fill="#84D8FF"></rect>
 
-                    <rect x="220" y="50" width="80" height="60" rx="14" fill="#D7FFB8" stroke="#58CC02" stroke-width="3"/>
-                    <rect x="234" y="66" width="52" height="8" rx="4" fill="#58CC02"/>
-                    <rect x="234" y="82" width="36" height="8" rx="4" fill="#A6E572"/>
+                    <rect x="220" y="50" width="80" height="60" rx="14" fill="#D7FFB8" stroke="#58CC02" stroke-width="3"></rect>
+                    <rect x="234" y="66" width="52" height="8" rx="4" fill="#58CC02"></rect>
+                    <rect x="234" y="82" width="36" height="8" rx="4" fill="#A6E572"></rect>
 
-                    <path d="M104 80 C 140 40, 180 120, 216 80" stroke="#FF9600" stroke-width="3" fill="none" stroke-dasharray="6 6" stroke-linecap="round"/>
+                    <path d="M104 80 C 140 40, 180 120, 216 80" stroke="#FF9600" stroke-width="3" fill="none" stroke-dasharray="6 6" stroke-linecap="round"></path>
 
-                    <circle cx="160" cy="80" r="22" fill="#FF9600"/>
-                    <path d="M150 80 L157 87 L172 70" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <circle cx="160" cy="80" r="22" fill="#FF9600"></circle>
+                    <path d="M150 80 L157 87 L172 70" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
                 </svg>
                 <h1>Match the Product</h1>
                 <button class="start-btn" onclick="startGame()">Start</button>
+                <a id="adminLink" class="admin-entry" href="?admin">Admin</a>
             </div>
         </div>
 
@@ -354,6 +520,17 @@
                 <div class="match-column" id="leftColumn"></div>
                 <div class="match-column" id="rightColumn"></div>
             </div>
+        </div>
+
+        <div id="levelCompleteContainer" class="results">
+            <h2>Level <span id="completedLevel">1</span> complete 🎉</h2>
+            <div class="score-box">
+                <div class="score-item">
+                    <div class="score-label">Time so far</div>
+                    <div class="score-value" id="levelTime">00:00</div>
+                </div>
+            </div>
+            <button class="restart-btn" onclick="startNextLevel()">Start level <span id="nextLevel">2</span></button>
         </div>
 
         <div id="resultsContainer" class="results">
@@ -366,40 +543,73 @@
             </div>
             <button class="restart-btn" onclick="location.reload()">Try Again</button>
         </div>
+
+        <div id="adminContainer" class="admin">
+            <a id="adminBack" class="admin-back" href="#">← Back to game</a>
+            <h1>Build a game</h1>
+            <p class="admin-sub">One pair per line: <b>Project, Product</b>. You can paste straight from Excel.</p>
+
+            <div class="admin-field">
+                <div class="admin-label">Level 1 <span id="meta1"></span></div>
+                <textarea id="list1" spellcheck="false" placeholder="Tyler S, Acton III
+Tyler M, Stanmore III"></textarea>
+                <div class="admin-status" id="status1"></div>
+            </div>
+
+            <div class="admin-field">
+                <div class="admin-label">Level 2, optional <span id="meta2"></span></div>
+                <textarea id="list2" spellcheck="false" placeholder="Leave empty to end the game after Level 1"></textarea>
+                <div class="admin-status" id="status2"></div>
+            </div>
+
+            <div class="admin-actions">
+                <button class="admin-btn" id="btnDownload" onclick="adminDownload()">Download game (HTML)</button>
+                <button class="admin-btn secondary" id="btnCopy" onclick="adminCopyLink()">Copy share link</button>
+                <button class="admin-btn secondary" id="btnPreview" onclick="adminPreview()">Preview</button>
+            </div>
+            <p class="admin-note">Players finish Level 1 to unlock Level 2. The share link points to this page, so open the admin from the address where you host the game.</p>
+        </div>
     </div>
 
+    <script id="gameConfig" type="application/json">{"l1":[["Tyler S","Acton III"],["Tyler M","Stanmore III"],["Tyler L","Woburn III"],["Nicks S","Acton IV"],["Nicks M","Stanmore IV"],["Ozzy","Monitor II ANC"],["Plant","Major V"],["Watts","Monitor III ANC"],["Waters","Milton ANC"],["Sammy","Motif ANC"],["Saxon","Mode II"],["Jett","Minor III"],["Gahan","Motif II ANC"],["Moon","Minor IV"],["Emberton II","Emberton II"]],"l2":[["Kurt","Mode USB-C"],["Zinken PCR","Zinken"],["Filippa","Juno"],["Infinite","PRT-01 SOL"],["Marc","Boo"],["Duplantis","Z.N.E. 01 ANC"],["Asllani","Z.N.E 01"],["Owens","FWD-02 sport"],["Desir","RPT-01"],["Stella","Alby"]]}</script>
     <script>
-        // Placeholder data - replace project/product pairs as needed
-        const gameData = [
-            { project: 'Tyler S', product: 'Acton III' },
-            { project: 'Tyler M', product: 'Stanmore III' },
-            { project: 'Tyler L', product: 'Woburn III' },
-            { project: 'Nicks S', product: 'Acton IV' },
-            { project: 'Nicks M', product: 'Stanmore IV' },
-            { project: 'Ozzy', product: 'Monitor II ANC' },
-            { project: 'Plant', product: 'Major V' },
-            { project: 'Watts', product: 'Monitor III ANC' },
-            { project: 'Waters', product: 'Milton ANC' },
-            { project: 'Sammy', product: 'Motif ANC' },
-            { project: 'Saxon', product: 'Mode II' },
-            { project: 'Jett', product: 'Minor III' },
-            { project: 'Gahan', product: 'Motif II ANC' },
-            { project: 'Moon', product: 'Minor IV' },
-            { project: 'Emberton II', product: 'Emberton II' }
-        ];
+        // Snapshot of the untouched page. The admin uses it to export a new standalone game.
+        const SOURCE_HTML = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 
         const PAIRS_PER_ROUND = 5;
-        const TOTAL_ROUNDS = 3;
+        const $ = id => document.getElementById(id);
 
-        let rounds = [];
-        let currentRound = 0;
-        let matchesInRound = 0;
-        let totalMatched = 0;
-        let startTime = Date.now();
-        let gameEnded = false;
-        let selectedLeft = null;
-        let selectedRight = null;
-        let busy = false;
+        // Sample content. Replace through the admin screen.
+        const DEFAULT_LEVEL_1 = [
+            ['Tyler S', 'Acton III'],
+            ['Tyler M', 'Stanmore III'],
+            ['Tyler L', 'Woburn III'],
+            ['Nicks S', 'Acton IV'],
+            ['Nicks M', 'Stanmore IV'],
+            ['Ozzy', 'Monitor II ANC'],
+            ['Plant', 'Major V'],
+            ['Watts', 'Monitor III ANC'],
+            ['Waters', 'Milton ANC'],
+            ['Sammy', 'Motif ANC'],
+            ['Saxon', 'Mode II'],
+            ['Jett', 'Minor III'],
+            ['Gahan', 'Motif II ANC'],
+            ['Moon', 'Minor IV'],
+            ['Emberton II', 'Emberton II']
+        ];
+
+        const DEFAULT_LEVEL_2 = [
+            ['Sample project 1', 'Sample product 1'],
+            ['Sample project 2', 'Sample product 2'],
+            ['Sample project 3', 'Sample product 3'],
+            ['Sample project 4', 'Sample product 4'],
+            ['Sample project 5', 'Sample product 5'],
+            ['Sample project 6', 'Sample product 6'],
+            ['Sample project 7', 'Sample product 7'],
+            ['Sample project 8', 'Sample product 8'],
+            ['Sample project 9', 'Sample product 9'],
+            ['Sample project 10', 'Sample product 10']
+        ];
 
         function shuffle(array) {
             const shuffled = [...array];
@@ -410,19 +620,93 @@
             return shuffled;
         }
 
+        function formatTime(ms) {
+            const elapsed = Math.max(0, Math.floor(ms / 1000));
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            return String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+        }
+
+        // ---------- Config: share link, baked file, defaults ----------
+        function sanitizeConfig(raw) {
+            if (!raw || !Array.isArray(raw.l1)) return null;
+            const clean = list => (Array.isArray(list) ? list : [])
+                .filter(p => Array.isArray(p) && typeof p[0] === 'string' && typeof p[1] === 'string' && p[0].trim() && p[1].trim())
+                .map(p => [p[0].trim(), p[1].trim()]);
+            const l1 = clean(raw.l1);
+            const l2 = clean(raw.l2);
+            if (l1.length < PAIRS_PER_ROUND) return null;
+            return { l1: l1, l2: l2.length >= PAIRS_PER_ROUND ? l2 : [] };
+        }
+
+        function encodeConfig(cfg) {
+            const bytes = new TextEncoder().encode(JSON.stringify(cfg));
+            let bin = '';
+            bytes.forEach(b => { bin += String.fromCharCode(b); });
+            return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        }
+
+        function decodeConfig(str) {
+            let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+            while (b64.length % 4) b64 += '=';
+            const bin = atob(b64);
+            const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+            return JSON.parse(new TextDecoder().decode(bytes));
+        }
+
+        function readHashConfig() {
+            const m = location.hash.match(/[#&]g=([A-Za-z0-9_-]+)/);
+            if (!m) return null;
+            try { return sanitizeConfig(decodeConfig(m[1])); } catch (e) { return null; }
+        }
+
+        function readBakedConfig() {
+            try { return sanitizeConfig(JSON.parse($('gameConfig').textContent)); } catch (e) { return null; }
+        }
+
+        const hashConfig = readHashConfig();
+        const bakedConfig = readBakedConfig();
+        const isCustomGame = !!(hashConfig || bakedConfig);
+        let config = hashConfig || bakedConfig || { l1: DEFAULT_LEVEL_1, l2: DEFAULT_LEVEL_2 };
+
+        // ---------- Game ----------
+        let plan = [];
+        let currentLevel = 0;
+        let currentRound = 0;
+        let matchesInRound = 0;
+        let totalMatched = 0;
+        let totalPairsInGame = 0;
+        let startTime = Date.now();
+        let pausedAt = 0;
+        let gameEnded = false;
+        let selectedLeft = null;
+        let selectedRight = null;
+        let busy = false;
+
+        function buildPlan(cfg) {
+            return [cfg.l1, cfg.l2]
+                .map(list => {
+                    const shuffled = shuffle(list);
+                    const rounds = [];
+                    for (let i = 0; i + PAIRS_PER_ROUND <= shuffled.length; i += PAIRS_PER_ROUND) {
+                        rounds.push(shuffled.slice(i, i + PAIRS_PER_ROUND).map(p => ({ project: p[0], product: p[1] })));
+                    }
+                    return rounds;
+                })
+                .filter(rounds => rounds.length > 0);
+        }
+
         function startGame() {
-            document.getElementById('welcomeContainer').style.display = 'none';
-            document.getElementById('gameHeader').style.display = 'block';
-            document.getElementById('gameContainer').style.display = 'block';
+            $('welcomeContainer').style.display = 'none';
+            $('gameHeader').style.display = 'block';
+            $('gameContainer').style.display = 'block';
             initGame();
         }
 
         function initGame() {
-            const shuffledData = shuffle(gameData).slice(0, PAIRS_PER_ROUND * TOTAL_ROUNDS);
-            rounds = [];
-            for (let i = 0; i < TOTAL_ROUNDS; i++) {
-                rounds.push(shuffledData.slice(i * PAIRS_PER_ROUND, (i + 1) * PAIRS_PER_ROUND));
-            }
+            plan = buildPlan(config);
+            totalPairsInGame = plan.reduce((sum, rounds) => sum + rounds.length * PAIRS_PER_ROUND, 0);
+            currentLevel = 0;
             currentRound = 0;
             totalMatched = 0;
             gameEnded = false;
@@ -437,11 +721,13 @@
             selectedLeft = null;
             selectedRight = null;
 
-            const roundPairs = rounds[currentRound];
-            document.getElementById('roundNum').textContent = currentRound + 1;
+            const roundPairs = plan[currentLevel][currentRound];
+            $('levelNum').textContent = currentLevel + 1;
+            $('roundNum').textContent = currentRound + 1;
+            $('roundsInLevel').textContent = plan[currentLevel].length;
 
-            const leftCol = document.getElementById('leftColumn');
-            const rightCol = document.getElementById('rightColumn');
+            const leftCol = $('leftColumn');
+            const rightCol = $('rightColumn');
             leftCol.innerHTML = '';
             rightCol.innerHTML = '';
 
@@ -450,35 +736,33 @@
                 leftBtn.className = 'match-item';
                 leftBtn.textContent = pair.project;
                 leftBtn.dataset.key = pair.project;
-                leftBtn.onclick = () => selectItem(leftBtn, 'left', pair.project);
+                leftBtn.onclick = () => selectItem(leftBtn, 'left');
                 leftCol.appendChild(leftBtn);
             });
 
-            const shuffledRight = shuffle(roundPairs);
-            shuffledRight.forEach(pair => {
+            shuffle(roundPairs).forEach(pair => {
                 const rightBtn = document.createElement('button');
                 rightBtn.className = 'match-item';
                 rightBtn.textContent = pair.product;
                 rightBtn.dataset.key = pair.project;
-                rightBtn.onclick = () => selectItem(rightBtn, 'right', pair.project);
+                rightBtn.onclick = () => selectItem(rightBtn, 'right');
                 rightCol.appendChild(rightBtn);
             });
 
             updateProgress();
         }
 
-        function selectItem(btn, side, key) {
+        function selectItem(btn, side) {
             if (busy || btn.classList.contains('matched')) return;
 
             if (side === 'left') {
                 if (selectedLeft) selectedLeft.classList.remove('selected');
                 selectedLeft = btn;
-                btn.classList.add('selected');
             } else {
                 if (selectedRight) selectedRight.classList.remove('selected');
                 selectedRight = btn;
-                btn.classList.add('selected');
             }
+            btn.classList.add('selected');
 
             if (selectedLeft && selectedRight) {
                 evaluateMatch();
@@ -510,15 +794,7 @@
 
                 if (matchesInRound === PAIRS_PER_ROUND) {
                     busy = true;
-                    setTimeout(() => {
-                        currentRound++;
-                        if (currentRound >= TOTAL_ROUNDS) {
-                            endGame();
-                        } else {
-                            renderRound();
-                        }
-                        busy = false;
-                    }, 700);
+                    setTimeout(advance, 700);
                 }
             } else {
                 busy = true;
@@ -535,25 +811,56 @@
             }
         }
 
+        function advance() {
+            currentRound++;
+            if (currentRound >= plan[currentLevel].length) {
+                if (currentLevel + 1 < plan.length) {
+                    showLevelComplete();
+                } else {
+                    endGame();
+                }
+            } else {
+                renderRound();
+            }
+            busy = false;
+        }
+
+        function showLevelComplete() {
+            pausedAt = Date.now();
+            $('completedLevel').textContent = currentLevel + 1;
+            $('nextLevel').textContent = currentLevel + 2;
+            $('levelTime').textContent = formatTime(pausedAt - startTime);
+            $('gameHeader').style.display = 'none';
+            $('gameContainer').style.display = 'none';
+            $('levelCompleteContainer').classList.add('show');
+            spawnConfetti(30);
+        }
+
+        function startNextLevel() {
+            // The timer does not run while the level-complete screen is open
+            startTime += Date.now() - pausedAt;
+            currentLevel++;
+            currentRound = 0;
+            $('levelCompleteContainer').classList.remove('show');
+            $('gameHeader').style.display = 'block';
+            $('gameContainer').style.display = 'block';
+            renderRound();
+        }
+
         function updateProgress() {
-            const progress = (totalMatched / (PAIRS_PER_ROUND * TOTAL_ROUNDS)) * 100;
-            document.getElementById('progressFill').style.width = progress + '%';
+            const progress = totalPairsInGame ? (totalMatched / totalPairsInGame) * 100 : 0;
+            $('progressFill').style.width = progress + '%';
         }
 
         function startTimer() {
             setInterval(() => {
                 if (gameEnded) return;
-                const elapsed = Math.floor((Date.now() - startTime) / 1000);
-                const minutes = Math.floor(elapsed / 60);
-                const seconds = elapsed % 60;
-                document.getElementById('timer').textContent =
-                    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                $('timer').textContent = formatTime(Date.now() - startTime);
             }, 100);
         }
 
-        function spawnConfetti() {
+        function spawnConfetti(count = 60) {
             const colors = ['#58cc02', '#1cb0f6', '#ff9600', '#ff4b4b', '#ffc800'];
-            const count = 60;
             for (let i = 0; i < count; i++) {
                 const piece = document.createElement('div');
                 piece.className = 'confetti-piece';
@@ -572,21 +879,207 @@
 
         function endGame() {
             gameEnded = true;
-
-            const elapsed = Math.floor((Date.now() - startTime) / 1000);
-            const minutes = Math.floor(elapsed / 60);
-            const seconds = elapsed % 60;
-            const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
-            document.getElementById('gameHeader').style.display = 'none';
-            document.getElementById('gameContainer').style.display = 'none';
-            document.getElementById('resultsContainer').classList.add('show');
-            document.getElementById('finalTime').textContent = timeStr;
+            $('finalTime').textContent = formatTime(Date.now() - startTime);
+            $('gameHeader').style.display = 'none';
+            $('gameContainer').style.display = 'none';
+            $('resultsContainer').classList.add('show');
             spawnConfetti();
         }
 
-        document.getElementById('welcomeContainer').style.display = 'flex';
-        document.getElementById('matchGrid').classList.add('active');
-    </script>
-</body>
-</html>
+        // ---------- Admin ----------
+        let adminState = { cfg: null, valid: false };
+
+        function parseList(text) {
+            const pairs = [];
+            const errors = [];
+            const seenProjects = new Set();
+            const seenProducts = new Set();
+            let seenFirst = false;
+
+            text.split(/\r?\n/).forEach((raw, i) => {
+                const line = raw.trim();
+                if (!line) return;
+                const isFirst = !seenFirst;
+                seenFirst = true;
+
+                let project, product;
+                if (line.indexOf('\t') !== -1) {
+                    const parts = line.split('\t').map(s => s.trim());
+                    project = parts[0];
+                    product = parts[1] || '';
+                } else {
+                    let idx = line.indexOf(',');
+                    if (idx < 0) idx = line.indexOf(';');
+                    if (idx < 0) {
+                        errors.push('Line ' + (i + 1) + ': put a comma between project and product');
+                        return;
+                    }
+                    project = line.slice(0, idx).trim();
+                    product = line.slice(idx + 1).trim();
+                }
+
+                if (!project || !product) {
+                    errors.push('Line ' + (i + 1) + ': needs both a project and a product');
+                    return;
+                }
+                // Skip a pasted header row such as "Project name, Product name"
+                if (isFirst && /^project/i.test(project) && /^product/i.test(product)) return;
+
+                const pk = project.toLowerCase();
+                const qk = product.toLowerCase();
+                if (seenProjects.has(pk)) {
+                    errors.push('Line ' + (i + 1) + ': "' + project + '" is already used as a project');
+                    return;
+                }
+                if (seenProducts.has(qk)) {
+                    errors.push('Line ' + (i + 1) + ': "' + product + '" is already used as a product');
+                    return;
+                }
+                seenProjects.add(pk);
+                seenProducts.add(qk);
+                pairs.push([project, product]);
+            });
+
+            return { pairs: pairs, errors: errors };
+        }
+
+        function levelStatus(level, parsed) {
+            const n = parsed.pairs.length;
+            const rounds = Math.floor(n / PAIRS_PER_ROUND);
+            const unused = n - rounds * PAIRS_PER_ROUND;
+            const roundWord = rounds === 1 ? 'round' : 'rounds';
+            const meta = n + (n === 1 ? ' pair' : ' pairs') + (rounds ? ' · ' + rounds + ' ' + roundWord : '');
+            let text = '';
+            let cls = '';
+            let valid = true;
+
+            if (parsed.errors.length) {
+                valid = false;
+                cls = 'error';
+                text = parsed.errors.slice(0, 3).join('\n');
+                if (parsed.errors.length > 3) text += '\n+' + (parsed.errors.length - 3) + ' more';
+            } else if (level === 1 && n < PAIRS_PER_ROUND) {
+                valid = false;
+                cls = 'error';
+                text = 'Level 1 needs at least ' + PAIRS_PER_ROUND + ' pairs.';
+            } else if (level === 2 && n === 0) {
+                text = 'Empty: the game ends after Level 1.';
+            } else if (level === 2 && n < PAIRS_PER_ROUND) {
+                valid = false;
+                cls = 'error';
+                text = 'Level 2 needs at least ' + PAIRS_PER_ROUND + ' pairs, or leave it empty.';
+            } else if (unused) {
+                text = rounds + ' ' + roundWord + ' of ' + PAIRS_PER_ROUND + '. ' + unused + ' left out at random each play. Add ' + (PAIRS_PER_ROUND - unused) + ' more for another round.';
+            } else {
+                cls = 'ok';
+                text = rounds + ' ' + roundWord + ' of ' + PAIRS_PER_ROUND + ', every pair is used.';
+            }
+            return { meta: meta, text: text, cls: cls, valid: valid };
+        }
+
+        function autoGrow(el) {
+            el.style.height = 'auto';
+            el.style.height = Math.min(el.scrollHeight + 2, 360) + 'px';
+        }
+
+        function refreshAdmin() {
+            const p1 = parseList($('list1').value);
+            const p2 = parseList($('list2').value);
+            const s1 = levelStatus(1, p1);
+            const s2 = levelStatus(2, p2);
+
+            $('meta1').textContent = s1.meta;
+            $('meta2').textContent = s2.meta;
+            $('status1').textContent = s1.text;
+            $('status1').className = 'admin-status ' + s1.cls;
+            $('status2').textContent = s2.text;
+            $('status2').className = 'admin-status ' + s2.cls;
+
+            const valid = s1.valid && s2.valid;
+            adminState = { cfg: { l1: p1.pairs, l2: p2.pairs }, valid: valid };
+            ['btnDownload', 'btnCopy', 'btnPreview'].forEach(id => { $(id).disabled = !valid; });
+
+            autoGrow($('list1'));
+            autoGrow($('list2'));
+        }
+
+        function pairsToText(list) {
+            return list.map(p => p[0] + ', ' + p[1]).join('\n');
+        }
+
+        function showAdmin() {
+            ['welcomeContainer', 'gameHeader', 'gameContainer'].forEach(id => { $(id).style.display = 'none'; });
+            $('adminContainer').classList.add('show');
+            $('list1').value = pairsToText(config.l1);
+            $('list2').value = pairsToText(config.l2);
+            const back = new URL(location.href);
+            back.searchParams.delete('admin');
+            $('adminBack').href = back.toString();
+            $('list1').addEventListener('input', refreshAdmin);
+            $('list2').addEventListener('input', refreshAdmin);
+            refreshAdmin();
+        }
+
+        function adminLink(cfg) {
+            const u = new URL(location.href);
+            u.search = '';
+            u.hash = '';
+            return u.toString() + '#g=' + encodeConfig(cfg);
+        }
+
+        function buildStandaloneHtml(cfg) {
+            const json = JSON.stringify(cfg).replace(/</g, '\\u003c');
+            const re = new RegExp('(<scr' + 'ipt id="gameConfig"[^>]*>)[\\s\\S]*?(</scr' + 'ipt>)');
+            return SOURCE_HTML.replace(re, (m, open, close) => open + json + close);
+        }
+
+        function adminDownload() {
+            if (!adminState.valid) return;
+            const html = buildStandaloneHtml(adminState.cfg);
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'match-the-product.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        async function adminCopyLink() {
+            if (!adminState.valid) return;
+            const link = adminLink(adminState.cfg);
+            let ok = false;
+            try {
+                await navigator.clipboard.writeText(link);
+                ok = true;
+            } catch (e) {
+                const box = document.createElement('textarea');
+                box.value = link;
+                box.style.position = 'fixed';
+                box.style.opacity = '0';
+                document.body.appendChild(box);
+                box.select();
+                try { ok = document.execCommand('copy'); } catch (e2) { ok = false; }
+                box.remove();
+            }
+            const btn = $('btnCopy');
+            btn.textContent = ok ? 'Link copied' : 'Could not copy';
+            setTimeout(() => { btn.textContent = 'Copy share link'; }, 1800);
+        }
+
+        function adminPreview() {
+            if (!adminState.valid) return;
+            window.open(adminLink(adminState.cfg), '_blank');
+        }
+
+        // ---------- Start ----------
+        $('matchGrid').classList.add('active');
+        if (new URLSearchParams(location.search).has('admin')) {
+            showAdmin();
+        } else {
+            $('welcomeContainer').style.display = 'flex';
+            if (isCustomGame) $('adminLink').style.display = 'none';
+        }
+    </script></body></html>
