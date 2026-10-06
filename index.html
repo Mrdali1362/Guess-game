@@ -468,6 +468,24 @@
             margin-top: 20px;
         }
 
+        .admin-input {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e5e5e5;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 16px;
+            color: #3c3c3c;
+            background: #FFFFFF;
+            outline: none;
+        }
+
+        .admin-input:focus {
+            border-color: #1cb0f6;
+            background: #f7fcff;
+        }
+
         .admin-entry {
             display: inline-block;
             margin-top: 28px;
@@ -544,6 +562,19 @@
             <button class="restart-btn" onclick="location.reload()">Try Again</button>
         </div>
 
+        <div id="adminGate" class="admin">
+            <a id="gateBack" class="admin-back" href="#">← Back to game</a>
+            <h1>Admin</h1>
+            <p class="admin-sub">Enter the password to build games.</p>
+            <form id="gateForm" onsubmit="submitGate(event)" autocomplete="off">
+                <input id="gateInput" class="admin-input" type="password" placeholder="Password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+                <div class="admin-status error" id="gateError"></div>
+                <div class="admin-actions">
+                    <button class="admin-btn" type="submit">Unlock</button>
+                </div>
+            </form>
+        </div>
+
         <div id="adminContainer" class="admin">
             <a id="adminBack" class="admin-back" href="#">← Back to game</a>
             <h1>Build a game</h1>
@@ -571,7 +602,7 @@ Tyler M, Stanmore III"></textarea>
         </div>
     </div>
 
-    <script id="gameConfig" type="application/json">{"l1":[["Tyler S","Acton III"],["Tyler M","Stanmore III"],["Tyler L","Woburn III"],["Nicks S","Acton IV"],["Nicks M","Stanmore IV"],["Ozzy","Monitor II ANC"],["Plant","Major V"],["Watts","Monitor III ANC"],["Waters","Milton ANC"],["Sammy","Motif ANC"],["Saxon","Mode II"],["Jett","Minor III"],["Gahan","Motif II ANC"],["Moon","Minor IV"],["Emberton II","Emberton II"]],"l2":[["Kurt","Mode USB-C"],["Zinken PCR","Zinken"],["Filippa","Juno"],["Infinite","PRT-01 SOL"],["Marc","Boo"],["Duplantis","Z.N.E. 01 ANC"],["Asllani","Z.N.E 01"],["Owens","FWD-02 sport"],["Desir","RPT-01"],["Stella","Alby"]]}</script>
+    <script id="gameConfig" type="application/json">{"l1":[["Tyler S","Acton III"],["Tyler M","Stanmore III"],["Tyler L","Woburn III"],["Nicks S","Acton IV"],["Nicks M","Stanmore IV"],["Ozzy","Monitor II ANC"],["Plant","Major V"],["Watts","Monitor III ANC"],["Waters","Milton ANC"],["Sammy","Motif ANC"],["Saxon","Mode II"],["Jett","Minor III"],["Gahan","Motif II ANC"],["Moon","Minor IV"],["Emberton II","Emberton II"]],"l2":[["Frank","Luma"],["Arnold","RPT-01"],["Stella","Alby"],["Owens","FWD-02 sport"],["Asllani","Z.N.E 01"],["Marc","Boo"],["Infinite","PRT-01 SOL"],["Freeman","FWD-01"],["Brixton","Emberton"],["Kurt","Mode USB-C"]]}</script>
     <script>
         // Snapshot of the untouched page. The admin uses it to export a new standalone game.
         const SOURCE_HTML = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
@@ -1074,10 +1105,62 @@ Tyler M, Stanmore III"></textarea>
             window.open(adminLink(adminState.cfg), '_blank');
         }
 
+        // ---------- Admin password gate ----------
+        // Client-side only. It keeps casual players out of the admin screen but is not real security.
+        const ADMIN_PASSWORD_HASH = 7641553671583519;
+
+        function hashText(str) {
+            let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+            for (let i = 0; i < str.length; i++) {
+                const ch = str.charCodeAt(i);
+                h1 = Math.imul(h1 ^ ch, 2654435761);
+                h2 = Math.imul(h2 ^ ch, 1597334677);
+            }
+            h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+            h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+            return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+        }
+
+        function isUnlocked() {
+            try { return sessionStorage.getItem('adminUnlocked') === '1'; } catch (e) { return false; }
+        }
+
+        function setUnlocked() {
+            try { sessionStorage.setItem('adminUnlocked', '1'); } catch (e) { /* storage unavailable, ask again next time */ }
+        }
+
+        function showGate() {
+            ['welcomeContainer', 'gameHeader', 'gameContainer'].forEach(id => { $(id).style.display = 'none'; });
+            const back = new URL(location.href);
+            back.searchParams.delete('admin');
+            $('gateBack').href = back.toString();
+            $('adminGate').classList.add('show');
+            $('gateInput').focus();
+        }
+
+        function submitGate(event) {
+            event.preventDefault();
+            const value = $('gateInput').value.trim();
+            if (hashText(value) === ADMIN_PASSWORD_HASH) {
+                setUnlocked();
+                $('adminGate').classList.remove('show');
+                $('gateError').textContent = '';
+                showAdmin();
+            } else {
+                $('gateError').textContent = 'Wrong password. Try again.';
+                $('gateInput').value = '';
+                $('gateInput').focus();
+            }
+        }
+
         // ---------- Start ----------
         $('matchGrid').classList.add('active');
         if (new URLSearchParams(location.search).has('admin')) {
-            showAdmin();
+            if (isUnlocked()) {
+                showAdmin();
+            } else {
+                showGate();
+            }
         } else {
             $('welcomeContainer').style.display = 'flex';
             if (isCustomGame) $('adminLink').style.display = 'none';
